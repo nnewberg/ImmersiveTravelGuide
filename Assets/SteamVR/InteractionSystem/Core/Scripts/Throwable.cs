@@ -16,35 +16,62 @@ namespace Valve.VR.InteractionSystem
 	[RequireComponent( typeof( VelocityEstimator ) )]
 	public class Throwable : MonoBehaviour
 	{
+
+        [HideInInspector]//CUSTOM
 		[EnumFlags]
 		[Tooltip( "The flags used to attach this object to the hand." )]
 		public Hand.AttachmentFlags attachmentFlags = Hand.AttachmentFlags.ParentToHand | Hand.AttachmentFlags.DetachFromOtherHand;
 
-		[Tooltip( "Name of the attachment transform under in the hand's hierarchy which the object should should snap to." )]
+        [HideInInspector]//CUSTOM
+        [Tooltip( "Name of the attachment transform under in the hand's hierarchy which the object should should snap to." )]
 		public string attachmentPoint;
 
-		[Tooltip( "How fast must this object be moving to attach due to a trigger hold instead of a trigger press?" )]
+        [HideInInspector]//CUSTOM
+        [Tooltip( "How fast must this object be moving to attach due to a trigger hold instead of a trigger press?" )]
 		public float catchSpeedThreshold = 0.0f;
 
-		[Tooltip( "When detaching the object, should it return to its original parent?" )]
+        [HideInInspector]//CUSTOM
+        [Tooltip( "When detaching the object, should it return to its original parent?" )]
 		public bool restoreOriginalParent = false;
 
-		public bool attachEaseIn = false;
-		public AnimationCurve snapAttachEaseInCurve = AnimationCurve.EaseInOut( 0.0f, 0.0f, 1.0f, 1.0f );
-		public float snapAttachEaseInTime = 0.15f;
-		public string[] attachEaseInAttachmentNames;
+        [HideInInspector]//CUSTOM
+        public bool attachEaseIn = false;
 
-		private VelocityEstimator velocityEstimator;
-		private bool attached = false;
-		private float attachTime;
-		private Vector3 attachPosition;
-		private Quaternion attachRotation;
-		private Transform attachEaseInTransform;
+        [HideInInspector]//CUSTOM
+        public AnimationCurve snapAttachEaseInCurve = AnimationCurve.EaseInOut( 0.0f, 0.0f, 1.0f, 1.0f );
 
-		public UnityEvent onPickUp;
-		public UnityEvent onDetachFromHand;
+        [HideInInspector]//CUSTOM
+        public float snapAttachEaseInTime = 0.15f;
 
-		public bool snapAttachEaseInCompleted = false;
+        [HideInInspector]//CUSTOM
+        public string[] attachEaseInAttachmentNames;
+
+        [HideInInspector]//CUSTOM
+        private VelocityEstimator velocityEstimator;
+
+        [HideInInspector]//CUSTOM
+        private bool attached = false;
+
+        [HideInInspector]//CUSTOM
+        private float attachTime;
+
+        [HideInInspector]//CUSTOM
+        private Vector3 attachPosition;
+
+        [HideInInspector]//CUSTOM
+        private Quaternion attachRotation;
+
+        [HideInInspector]//CUSTOM
+        private Transform attachEaseInTransform;
+
+        [HideInInspector]//CUSTOM
+        public UnityEvent onPickUp;
+
+        [HideInInspector]//CUSTOM
+        public UnityEvent onDetachFromHand;
+
+        [HideInInspector]//CUSTOM
+        public bool snapAttachEaseInCompleted = false;
 
 
 		//-------------------------------------------------

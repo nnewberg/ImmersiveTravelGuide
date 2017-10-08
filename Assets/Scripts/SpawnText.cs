@@ -6,27 +6,40 @@ using UnityEngine.Events;
 public class SpawnText : MonoBehaviour {
 
     public TextMesh Text;
-    public float DelayBeforeSpawn = 0f;
+    public float DelayBeforeFadeIn = 1f;
+    public float DelayBeforeFadeOut = 0f;
 
-    private TextMesh textMesh;
+    private Material textMat;
+    private bool isTextShown = false;
 
     void Awake()
     {
         //Subscribe to pickup and dropping events on this object
         var obj = GetComponent<Valve.VR.InteractionSystem.WermholeObject>();
-        obj.onPickUp.AddListener(InvokeSpawn);
-        obj.onDetachFromHand.AddListener(RemoveText);
+        obj.onPickUp.AddListener(DelaySpawn);
+        obj.onDetachFromHand.AddListener(DelayRemoval);
 
+
+        textMat = Text.GetComponent<Renderer>().material;
         //set text to transparent by default
-        Color c = Text.color;
+        Color c = textMat.color;
         c.a = 0f;
-        Text.color = c;
+        textMat.color = c;
+
+
 
     }
 
-    private void InvokeSpawn()
+    private void DelaySpawn()
     {
-        Invoke("Spawn", DelayBeforeSpawn);
+        if (!isTextShown) //only fade in the text when it's completely hidden
+        {
+            Invoke("Spawn", DelayBeforeFadeIn);
+        }else //if it's already shown, kill any fade out processes
+        {
+            //want to stop the fade out process
+            CancelInvoke("RemoveText");
+        }
     }
 
     private void Spawn()
@@ -39,21 +52,37 @@ public class SpawnText : MonoBehaviour {
     {
         for (float f = 0f; f <= 1f; f += 0.01f)
         {
-            Color c = Text.color;
+            Color c = textMat.color;
             c.a = f;
-            Text.color = c;
+            textMat.color = c;
             yield return null;
         }
+
+        isTextShown = true;
     }
 
     IEnumerator FadeOutText()
     {
         for (float f = 1f; f >= 0f; f -= 0.01f)
         {
-            Color c = Text.color;
+            Color c = textMat.color;
             c.a = f;
-            Text.color = c;
+            textMat.color = c;
             yield return null;
+        }
+
+        isTextShown = false;
+    }
+
+    private void DelayRemoval()
+    {
+        if (isTextShown)
+        {
+            Invoke("RemoveText", DelayBeforeFadeOut);
+
+        }else
+        {
+            CancelInvoke("Spawn");
         }
     }
 

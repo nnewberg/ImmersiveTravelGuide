@@ -7,6 +7,7 @@ namespace Valve.VR.InteractionSystem
 {
     public class WermholeObject : Throwable
     {
+        [HideInInspector]
         public UnityEvent onReturn;
     }
 

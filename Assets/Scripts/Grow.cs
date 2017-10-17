@@ -8,7 +8,7 @@ public class Grow : MonoBehaviour {
     public float ScaleAmount = 2f;
     public float DelayBeforeShrink = 1f;
     private Transform camPostion;
-    private float initScale;
+    private Vector3 initScale;
     private bool canGrow = false;
     private bool pickedUpOnce = false;
 
@@ -17,8 +17,9 @@ public class Grow : MonoBehaviour {
         var obj = GetComponent<Valve.VR.InteractionSystem.WermholeObject>();
         obj.onPickUp.AddListener(InitializeGrow);
         obj.onDetachFromHand.AddListener(StopGrowing);
-
-        camPostion = Camera.main.gameObject.transform;
+        
+        if(Camera.main)
+            camPostion = Camera.main.gameObject.transform;
 
     }
 	
@@ -31,11 +32,11 @@ public class Grow : MonoBehaviour {
             if (distToFace < DistanceThreshold)
             {
                 float t = 1f - normalize(distToFace, DistanceThreshold, 0.3f);
-                this.transform.localScale = Vector3.one * Mathf.Lerp(initScale, 2f * initScale, t);
+                this.transform.localScale = Vector3.Lerp(initScale, ScaleAmount * initScale, t);
             }
             else
             {
-                this.transform.localScale = Vector3.one * initScale;
+                this.transform.localScale = initScale;
 
             }
 
@@ -48,7 +49,7 @@ public class Grow : MonoBehaviour {
     {
         if (!pickedUpOnce) //DIRTTY like ur mom
         {
-            initScale = this.transform.localScale.x;
+            initScale = this.transform.localScale;
             pickedUpOnce = true;
         }
 
@@ -70,12 +71,12 @@ public class Grow : MonoBehaviour {
     IEnumerator ReturnToInitialScale(float time)
     {
         float elapsedTime = 0f;
-        float bigScale = this.transform.localScale.x;
+        Vector3 bigScale = this.transform.localScale;
         
         while (elapsedTime < time)
         {
-            float currScale = Mathf.Lerp(bigScale, initScale, elapsedTime / time);
-            this.transform.localScale = Vector3.one * currScale;
+            Vector3 currScale = Vector3.Lerp(bigScale, initScale, elapsedTime / time);
+            this.transform.localScale = currScale;
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }

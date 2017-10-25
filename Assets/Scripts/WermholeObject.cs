@@ -9,6 +9,8 @@ namespace Valve.VR.InteractionSystem
     {
         [HideInInspector]
         public UnityEvent onReturn;
+        [HideInInspector]
+        public UnityEvent onGazeTrigger, onGazeExit;
     }
 
 }
